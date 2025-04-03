@@ -1,9 +1,23 @@
 
+import { Suspense } from 'react';
 import './App.css'
 import Batsman from './batsman';
 import Counter from './counter';
+import Users from './users';
+import Friends from './friends';
+
+const fetchUsers = fetch("https://jsonplaceholder.typicode.com/posts")
+.then(res => res.json())
+// fetch user done 
+
+const fetchFriends = async () => {
+const res = await fetch("https://jsonplaceholder.typicode.com/users")
+return res.json()
+}
+
 
 function App() {
+  const friendPromise = fetchFriends() 
  
 function handleClick (){
   alert('I am clicked')
@@ -18,6 +32,8 @@ function handleClick4 (num){
 }
 
   return (
+
+    
     <>
       
       <h1>Vite + React</h1>
@@ -33,6 +49,19 @@ function handleClick4 (num){
      {/* When we send a parameter to a function , then we should raped it with an arrow function */}
      
      <Batsman></Batsman>
+
+    <Suspense fallback={<h3> Loading...</h3>}>
+      <Users fetchUsers ={fetchUsers}></Users>
+    </Suspense>
+
+    {/* fetch friends */}
+    
+<Suspense fallback={<h3>Friends are coming for treat</h3>}>
+  <Friends friendPromise ={friendPromise}>
+
+  </Friends>
+</Suspense>
+
     </>
   )
 }
